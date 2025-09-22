@@ -2,16 +2,15 @@
   "version": 2,
   "buildCommand": "npm run build",
   "outputDirectory": "dist/market",
-  "cleanUrls": true,
-  "trailingSlash": false,
-  "routes": [
+  "functions": {},
+  "rewrites": [
     {
-      "src": "/assets/(.*)",
-      "dest": "/dist/market/assets/$1"
+      "source": "/assets/(.*)",
+      "destination": "/assets/$1"
     },
     {
-      "src": "/(.*)",
-      "dest": "/dist/market/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
