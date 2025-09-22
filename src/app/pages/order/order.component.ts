@@ -1,10 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, computed } from '@angular/core';
 import { ProductService } from "@services/product.service";
 import { CommonModule } from "@angular/common";
-import {debounceTime, map, Observable, startWith, Subscription} from 'rxjs';
-import {FormControl, ReactiveFormsModule} from "@angular/forms";
-import {OwnerNavigationComponent} from "@components/owner-navigation/owner-navigation.component";
-import {WorkerNavigationComponent} from "@components/worker-navigation/worker-navigation.component";
+import { debounceTime, map, Observable, startWith, Subscription, BehaviorSubject } from 'rxjs';
+import { FormControl, ReactiveFormsModule } from "@angular/forms";
+import { OwnerNavigationComponent } from "@components/owner-navigation/owner-navigation.component";
+import { WorkerNavigationComponent } from "@components/worker-navigation/worker-navigation.component";
 
 @Component({
   selector: 'app-order',
@@ -20,34 +20,37 @@ export class OrderComponent implements OnInit, OnDestroy {
   workerId: number = 0;
   products: any[] = [];
   orders: any[] = [];
-  filteredProducts$: Observable<any[]> = new Observable<any[]>(); // başlangıçta boş Observable
   searchControl = new FormControl('');
-  expandedOrder: number | null = null; // Açık olan siparişin index'i
+  expandedOrder: number | null = null;
   userRole: string = "";
+
+  // ✅ FIX: BehaviorSubject kullanarak products değişikliklerini takip et
+  private productsSubject = new BehaviorSubject<any[]>([]);
+  public filteredProducts$: Observable<any[]>;
 
   private priceUpdateSubscription: Subscription | null = null;
   private initialPricesSubscription: Subscription | null = null;
 
-  constructor(public productService: ProductService) {}
+  constructor(public productService: ProductService) {
+    // ✅ FIX: Products değiştiğinde otomatik güncellenen observable
+    this.filteredProducts$ = this.searchControl.valueChanges.pipe(
+      startWith(''),
+      debounceTime(300),
+      map(searchText => this.filterProducts(searchText ?? '', this.productsSubject.value))
+    );
+  }
 
   ngOnInit() {
     this.placeId = JSON.parse(<string>localStorage.getItem("userData")).user.placeIds[0];
     this.workerId = JSON.parse(<string>localStorage.getItem("userData")).user.id;
     this.userRole = JSON.parse(<string>localStorage.getItem("userData")).user.role;
 
-    this.filteredProducts$ = this.searchControl.valueChanges.pipe(
-      startWith(''),
-      debounceTime(300),
-      map(searchText => this.filterProducts(searchText ?? '')) // null ise '' kullan
-    );
-
-    //this.getProducts();
     this.getWorkerOrders();
-    this.connectToPriceUpdates(); // Fiyat güncellemelerine bağlan
+    this.connectToPriceUpdates();
   }
 
   ngOnDestroy() {
-    this.disconnectFromPriceUpdates(); // Bağlantıyı temizle
+    this.disconnectFromPriceUpdates();
   }
 
   toggleOrderDetails(index: number) {
@@ -58,9 +61,8 @@ export class OrderComponent implements OnInit, OnDestroy {
     }
   }
 
-// Fiyat güncellemelerine bağlan
   connectToPriceUpdates(): void {
-    this.productService.connectToPriceUpdates(""+this.placeId);
+    this.productService.connectToPriceUpdates("" + this.placeId);
 
     // İlk fiyatları dinle
     this.initialPricesSubscription = this.productService.getInitialPrices().subscribe({
@@ -74,6 +76,9 @@ export class OrderComponent implements OnInit, OnDestroy {
             count: 0
           }));
           console.log('İlk ürün yüklemesi tamamlandı:', this.products.length, 'ürün');
+
+          // ✅ FIX: Products güncellendiğinde subject'i güncelle
+          this.productsSubject.next(this.products);
         } else {
           // Güncelleme - mevcut count değerlerini koru
           this.products = this.products.map(localProduct => {
@@ -87,11 +92,13 @@ export class OrderComponent implements OnInit, OnDestroy {
             return localProduct;
           });
           console.log('Ürün fiyatları güncellendi');
+
+          // ✅ FIX: Products güncellendiğinde subject'i güncelle
+          this.productsSubject.next(this.products);
         }
       },
       error: (err) => {
         console.error('İlk fiyatlar alınırken hata:', err);
-        // Hata durumunda fallback olarak HTTP ile getir
         this.getProductsFallback();
       }
     });
@@ -107,9 +114,9 @@ export class OrderComponent implements OnInit, OnDestroy {
     });
   }
 
-// Fallback metodu - socket başarısız olursa HTTP ile getir
+  // Fallback metodu - socket başarısız olursa HTTP ile getir
   private getProductsFallback(): void {
-    this.productService.getProducts(""+this.placeId).subscribe({
+    this.productService.getProducts("" + this.placeId).subscribe({
       next: (res) => {
         if (res) {
           this.products = res.products.map((product: any) => ({
@@ -117,6 +124,9 @@ export class OrderComponent implements OnInit, OnDestroy {
             count: 0
           }));
           console.log("Fallback: Ürünler HTTP ile getirildi:", this.products);
+
+          // ✅ FIX: Products güncellendiğinde subject'i güncelle
+          this.productsSubject.next(this.products);
         }
       },
       error: (err) => {
@@ -133,8 +143,7 @@ export class OrderComponent implements OnInit, OnDestroy {
     if (this.initialPricesSubscription) {
       this.initialPricesSubscription.unsubscribe();
     }
-
-    this.productService.disconnectFromPriceUpdates(""+this.placeId);
+    this.productService.disconnectFromPriceUpdates("" + this.placeId);
   }
 
   // Ürün fiyatını güncelle
@@ -151,41 +160,24 @@ export class OrderComponent implements OnInit, OnDestroy {
       };
 
       console.log(`Ürün fiyatı güncellendi: ${update.productId} -> ${update.newPrice}`);
+
+      // ✅ FIX: Fiyat güncellendiğinde subject'i güncelle
+      this.productsSubject.next(this.products);
     }
   }
-
-  /*
-  getProducts() {
-    this.productService.getProducts(""+this.placeId).subscribe({
-      next: (res) => {
-        if (res) {
-          this.products = res.products.map((product: any) => {
-            // Mevcut count'u koru veya 0 yap
-            const existingProduct = this.products.find(p => p._id === product._id);
-            return {
-              ...product,
-              count: existingProduct ? existingProduct.count : 0
-            };
-          });
-          console.log("Ürünler getirildi:", this.products);
-        }
-      },
-      error: (err) => {
-        console.error("Ürün getirme hatası:", err);
-      }
-    });
-  }
-
-   */
 
   decrementOrder(product: any) {
     if (product.count > 0) {
       product.count = product.count - 1;
+      // ✅ FIX: Count değiştiğinde subject'i güncelle
+      this.productsSubject.next(this.products);
     }
   }
 
   incrementOrder(product: any) {
     product.count = product.count + 1;
+    // ✅ FIX: Count değiştiğinde subject'i güncelle
+    this.productsSubject.next(this.products);
   }
 
   createOrder() {
@@ -194,7 +186,7 @@ export class OrderComponent implements OnInit, OnDestroy {
       orderedProducts.push({
         productId: product._id,
         productName: product.productName,
-        soldPrice: product.currentPrice, // Güncel fiyatı kullan
+        soldPrice: product.currentPrice,
         quantity: product.count
       });
     });
@@ -204,7 +196,7 @@ export class OrderComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.productService.createOrder(""+this.placeId, orderedProducts).subscribe({
+    this.productService.createOrder("" + this.placeId, orderedProducts).subscribe({
       next: (res) => {
         console.log("Order başarılı:", res);
         // Sipariş verildikten sonra count'ları sıfırla
@@ -212,6 +204,8 @@ export class OrderComponent implements OnInit, OnDestroy {
           ...product,
           count: 0
         }));
+        // ✅ FIX: Count'lar sıfırlandığında subject'i güncelle
+        this.productsSubject.next(this.products);
         // Sipariş listesini yenile
         this.getWorkerOrders();
       },
@@ -222,7 +216,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   getWorkerOrders() {
-    this.productService.getWorkerOrders(""+this.workerId).subscribe({
+    this.productService.getWorkerOrders("" + this.workerId).subscribe({
       next: (res) => {
         if (res) {
           this.orders = res.orders;
@@ -249,17 +243,17 @@ export class OrderComponent implements OnInit, OnDestroy {
     });
   }
 
-// Toplam tutarı hesapla
+  // Toplam tutarı hesapla
   getTotalAmount(): number {
     return this.products.reduce((total, product) => {
       return total + (product.currentPrice * product.count);
     }, 0);
   }
 
-
-  filterProducts(searchText: string) {
-    if (!searchText) return this.products;
-    return this.products.filter(product =>
+  // ✅ FIX: Filter metodunu güncelle - products array'ini parametre olarak al
+  filterProducts(searchText: string, products: any[]): any[] {
+    if (!searchText) return products;
+    return products.filter(product =>
       product.productName.toLowerCase().includes(searchText.toLowerCase())
     );
   }
