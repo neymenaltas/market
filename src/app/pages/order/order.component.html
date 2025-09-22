@@ -35,8 +35,7 @@
             />
 
             <ul class="product-list">
-                <li *ngFor="let product of filteredProducts$ | async" class="product-item">
-                    <div class="product-info">
+                <li *ngFor="let product of filteredProducts" class="product-item">                    <div class="product-info">
                         <span class="product-name">{{ product.productName }}</span>
                         <span class="product-price">₺{{ product.currentPrice?.toFixed(2) }}</span>
                     </div>
