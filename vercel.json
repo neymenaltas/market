@@ -1,42 +1,6 @@
+
 {
   "version": 2,
   "buildCommand": "npm run build",
-  "outputDirectory": "dist/market",
-  "cleanUrls": false,
-  "trailingSlash": false,
-  "headers": [
-    {
-      "source": "/(.*)\\.js",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/javascript"
-        }
-      ]
-    },
-    {
-      "source": "/(.*)\\.css",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "text/css"
-        }
-      ]
-    },
-    {
-      "source": "/manifest.webmanifest",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/manifest+json"
-        }
-      ]
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/((?!.*\\.).*)$",
-      "destination": "/index.html"
-    }
-  ]
+  "outputDirectory": "dist/market"
 }

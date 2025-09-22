@@ -6,8 +6,8 @@
     "start": "ng serve",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "build": "ng build --configuration production",
-    "build:vercel": "ng build --configuration production",
+    "build": "ng build --configuration=production && cp -r dist/market/* dist/ || xcopy dist\\market\\* dist\\ /E /Y",
+    "build:vercel": "ng build --configuration=production",
     "dev": "ng serve"
   },
   "private": true,
