@@ -6,9 +6,9 @@
     "start": "ng serve",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "build": "ng build --configuration production",
-    "dev": "ng serve",
-    "vercel-build": "ng build --configuration production"
+    "build": "ng build --configuration production --base-href /",
+    "build:vercel": "ng build --configuration production --base-href /",
+    "dev": "ng serve"
   },
   "private": true,
   "dependencies": {

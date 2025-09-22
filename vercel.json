@@ -2,11 +2,9 @@
   "version": 2,
   "buildCommand": "npm run build",
   "outputDirectory": "dist/market",
+  "cleanUrls": true,
+  "trailingSlash": false,
   "routes": [
-    {
-      "src": "/manifest.webmanifest",
-      "dest": "/dist/market/manifest.webmanifest"
-    },
     {
       "src": "/assets/(.*)",
       "dest": "/dist/market/assets/$1"
