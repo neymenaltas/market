@@ -4,6 +4,14 @@
   "outputDirectory": "dist/market",
   "routes": [
     {
+      "src": "/manifest.webmanifest",
+      "dest": "/dist/market/manifest.webmanifest"
+    },
+    {
+      "src": "/assets/(.*)",
+      "dest": "/dist/market/assets/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "/dist/market/index.html"
     }
