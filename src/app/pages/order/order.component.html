@@ -1,0 +1,122 @@
+<ng-container *ngIf="userRole === 'owner'">
+    <app-owner-navigation />
+</ng-container>
+<ng-container *ngIf="userRole === 'worker'">
+    <app-worker-navigation />
+</ng-container>
+<div class="order-container">
+
+    <!-- Tab Header -->
+    <div class="tabs">
+        <button
+                [class.active]="activeTab === 'products'"
+                (click)="activeTab = 'products'">
+            Sipariş Al
+        </button>
+        <button
+                [class.active]="activeTab === 'orders'"
+                (click)="activeTab = 'orders'">
+            Sipariş Geçmişi
+        </button>
+    </div>
+
+    <!-- Tab İçerikleri -->
+    <div class="tab-content">
+
+        <!-- Ürün Listesi -->
+        <div *ngIf="activeTab === 'products'" class="products-section">
+
+            <!-- Search -->
+            <input
+                    type="text"
+                    placeholder="Ürün ara..."
+                    [formControl]="searchControl"
+                    class="search-input"
+            />
+
+            <ul class="product-list">
+                <li *ngFor="let product of filteredProducts$ | async" class="product-item">
+                    <div class="product-info">
+                        <span class="product-name">{{ product.productName }}</span>
+                        <span class="product-price">₺{{ product.currentPrice?.toFixed(2) }}</span>
+                    </div>
+                    <div class="product-controls">
+                        <button (click)="decrementOrder(product)" class="btn-decrement">-</button>
+                        <span class="product-count">{{ product.count }}</span>
+                        <button (click)="incrementOrder(product)" class="btn-increment">+</button>
+                    </div>
+                </li>
+            </ul>
+
+            <div class="total-amount">Toplam: ₺{{ getTotalAmount() }}
+
+            </div>
+            <div class="btn-order-wrapper">
+                <button (click)="createOrder()" class="btn-order">
+                    Sipariş Ver
+                </button>
+            </div>
+
+        </div>
+
+
+        <!-- Sipariş Geçmişi -->
+        <div *ngIf="activeTab === 'orders'" class="orders-section">
+            <table class="orders-table">
+                <thead>
+                <tr>
+                    <th>Tarih</th>
+                    <th>Çalışan</th>
+                    <th>Toplam</th>
+                    <th>İşlemler</th>
+                </tr>
+                </thead>
+                <tbody>
+                <ng-container *ngFor="let order of orders; let i = index">
+                    <tr class="order-row" [class.expanded]="expandedOrder === i"
+                        (click)="toggleOrderDetails(i)">
+                        <td>{{ order.createdAt | date:'dd.MM.yyyy HH:mm' }}</td>
+                        <td>{{ order.createdBy }}</td>
+                        <td>₺{{ order.totalAmount?.toFixed(2) }}</td>
+                        <td>
+                            <button class="delete-btn" (click)="deleteOrder(order); $event.stopPropagation()">
+                                Sil
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="expandedOrder === i">
+                        <td colspan="6">
+                            <div class="order-details">
+                                <h3>Sipariş Detayları</h3>
+                                <table class="order-products-table">
+                                    <thead>
+                                    <tr>
+                                        <th>Ürün</th>
+                                        <th>Adet</th>
+                                        <th>Birim Fiyat</th>
+                                        <th>Toplam</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr *ngFor="let product of order.products">
+                                        <td>{{ product.productName }}</td>
+                                        <td>{{ product.quantity }}</td>
+                                        <td>₺{{ +product.soldPrice?.toFixed(2) }}</td>
+                                        <td>₺{{ (product.soldPrice * product.quantity).toFixed(2) }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-container>
+                </tbody>
+            </table>
+
+            <div *ngIf="orders.length === 0" class="no-orders">
+                <p>Henüz sipariş bulunmamaktadır.</p>
+            </div>
+        </div>
+
+    </div>
+</div>

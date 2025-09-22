@@ -1,0 +1,31 @@
+<input [(ngModel)]="placeName">
+
+<button (click)="registerPlace()">Mekanı kaydet</button>
+
+
+<input [(ngModel)]="username">
+
+<input [(ngModel)]="password">
+
+
+<button (click)="createOwner()">Owner Yarat</button>
+
+<select (change)="onOwnerChange($event)">
+    <option value="" disabled selected>Bir owner seçin</option>
+    <option *ngFor="let owner of owners" [value]="owner._id">
+        {{ owner.username }}
+    </option>
+</select>
+
+<p>Seçilen Owner ID: {{ selectedOwnerId }}</p>
+
+<select (change)="onPlaceChange($event)">
+    <option value="" disabled selected>Bir place seçin</option>
+    <option *ngFor="let place of places" [value]="place._id">
+        {{ place.placeName }}
+    </option>
+</select>
+
+<p>Seçilen Place ID: {{ selectedPlaceId }}</p>
+
+<button (click)="assignOwnerToPlace()">Assing Owner to Place</button>

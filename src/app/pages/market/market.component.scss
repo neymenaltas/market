@@ -1,0 +1,256 @@
+.products-table-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 2rem;
+  padding: 1rem;
+  background: radial-gradient(circle at top left, #0d1117, #000000 70%);
+  min-height: 96vh;
+  position: relative;
+}
+
+.table-wrapper {
+  width: 100%;
+  border-radius: 0.8rem;
+  box-shadow: 0 0 25px rgba(0, 255, 150, 0.25);
+}
+
+.products-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Roboto Mono', monospace;
+  color: #e0e0e0;
+  background: rgba(13, 17, 23, 0.9);
+  backdrop-filter: blur(8px);
+}
+
+.products-table thead {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  background: linear-gradient(
+                  90deg,
+                  rgba(0, 255, 150, 0.15),
+                  rgba(0, 200, 255, 0.15)
+  );
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.products-table tbody {
+  display: block;
+  max-height: 80vh;
+  overflow-y: auto;
+  width: 100%;
+  scroll-behavior: smooth;
+}
+
+.products-table tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  transition: all 0.3s ease;
+}
+
+.products-table th,
+.products-table td {
+  padding: 0.8rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.products-table th {
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.85rem;
+  color: #00ff9d;
+}
+
+.products-table tr:hover {
+  background: rgba(0, 255, 150, 0.07);
+}
+
+.products-table tr.updated {
+  animation: pulse-row 0.6s ease;
+}
+
+/* Auto-highlight stili - sadece soldaki tablo için */
+.products-table tr.auto-highlighted {
+  background: linear-gradient(
+                  90deg,
+                  rgba(0, 255, 150, 0.2),
+                  rgba(0, 255, 150, 0.1),
+                  rgba(0, 255, 150, 0.2)
+  ) !important;
+  border: 1px solid rgba(0, 255, 150, 0.4);
+  box-shadow:
+          0 0 15px rgba(0, 255, 150, 0.3),
+          inset 0 0 15px rgba(0, 255, 150, 0.1);
+  animation: highlight-glow 2s ease-in-out infinite alternate;
+  transform: scale(1.02);
+  z-index: 5;
+  position: relative;
+}
+
+.products-table tr.auto-highlighted .product-name {
+  color: #ffffff;
+  font-weight: 900;
+  text-shadow: 0 0 8px rgba(0, 255, 150, 0.8);
+}
+
+.products-table tr.auto-highlighted td {
+  border-bottom-color: rgba(0, 255, 150, 0.3);
+}
+
+@keyframes highlight-glow {
+  0% {
+    box-shadow:
+            0 0 15px rgba(0, 255, 150, 0.3),
+            inset 0 0 15px rgba(0, 255, 150, 0.1);
+  }
+  100% {
+    box-shadow:
+            0 0 25px rgba(0, 255, 150, 0.5),
+            inset 0 0 25px rgba(0, 255, 150, 0.2);
+  }
+}
+
+.product-name {
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.current-price-positive {
+  font-weight: bold;
+  color: #00ff9d;
+  text-shadow: 0 0 6px #00ff9d;
+}
+
+.current-price-negative {
+  font-weight: bold;
+  color: #ff4d4d;
+  text-shadow: 0 0 6px #ff1a1a;
+}
+
+.current-price {
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.regular-price {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.previous-price {
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: line-through;
+}
+
+.change-percent {
+  font-weight: bold;
+}
+
+.change-percent.positive {
+  color: #4caf50;
+  text-shadow: 0 0 6px #4caf50;
+}
+
+.change-percent.negative {
+  color: #ff3b3b;
+  text-shadow: 0 0 6px #ff3b3b;
+}
+
+@keyframes pulse-row {
+  0% {
+    background-color: rgba(0, 255, 150, 0.15);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+/* Haber bandı stilleri */
+.news-ticker-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(13, 17, 23, 0.95);
+  color: white;
+  padding: 12px 0;
+  overflow: hidden;
+  box-shadow: 0 -2px 15px rgba(0, 255, 150, 0.3);
+  z-index: 1000;
+  border-top: 1px solid rgba(0, 255, 150, 0.2);
+}
+
+.news-ticker {
+  display: flex;
+  white-space: nowrap;
+  animation: ticker-scroll 60s linear infinite;
+}
+
+.ticker-item {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 40px;
+  padding: 5px 15px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ticker-product-name {
+  margin-right: 8px;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.ticker-change {
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.ticker-change.positive {
+  color: #00ff9d;
+  text-shadow: 0 0 5px rgba(0, 255, 150, 0.7);
+}
+
+.ticker-change.negative {
+  color: #ff4d4d;
+  text-shadow: 0 0 5px rgba(255, 77, 77, 0.7);
+}
+
+@keyframes ticker-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Scroll bar stilini gizle ama fonksiyonu koru */
+.products-table tbody::-webkit-scrollbar {
+  width: 6px;
+}
+
+.products-table tbody::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.products-table tbody::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 150, 0.3);
+}
+
+.products-table tbody::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 150, 0.5);
+}
+
+.products-table tbody::-webkit-scrollbar:horizontal {
+  height: 0; /* Yatay scrollbar'ı tamamen gizler */
+  display: none; /* Alternatif olarak display none da kullanılabilir */
+}

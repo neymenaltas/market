@@ -1,0 +1,9 @@
+<app-owner-navigation />
+<select class="styled-select" (change)="onPlaceChange($event)">
+    <option *ngFor="let place of places" [value]="place._id">
+        {{ place.placeName }}
+    </option>
+</select>
+<input [(ngModel)]="intervalMs">
+<button (click)="startExchange()">Start Market</button>
+<button (click)="stopExchange()">Stop Markex</button>

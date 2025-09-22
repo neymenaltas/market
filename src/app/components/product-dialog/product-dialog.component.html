@@ -1,0 +1,31 @@
+<div class="dialog-form">
+    <label>
+        Ürün Adı
+        <input [(ngModel)]="productName" placeholder="Ürün adı giriniz">
+    </label>
+
+    <label>
+        Normal Fiyat
+        <input type="number" [(ngModel)]="regularPrice" placeholder="₺0.00">
+    </label>
+
+    <label *ngIf="this.currentPrice">
+        Şimdiki Fiyat
+        <input type="number" [(ngModel)]="currentPrice" placeholder="₺0.00">
+    </label>
+
+    <label>
+        Minimum Fiyat
+        <input type="number" [(ngModel)]="minPrice" placeholder="₺0.00">
+    </label>
+
+    <label>
+        Maksimum Fiyat
+        <input type="number" [(ngModel)]="maxPrice" placeholder="₺0.00">
+    </label>
+
+    <div class="actions">
+        <button class="btn save" (click)="save()">Kaydet</button>
+        <button class="btn cancel" (click)="close()">Kapat</button>
+    </div>
+</div>

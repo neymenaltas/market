@@ -1,0 +1,32 @@
+<app-owner-navigation />
+
+
+<select class="styled-select" (change)="onPlaceChange($event)">
+    <option *ngFor="let place of places" [value]="place._id">
+        {{ place.placeName }}
+    </option>
+</select>
+
+<button class="add-edit-dialog" (click)="openAddProductDialog()">Ürün Ekle</button>
+
+<div class="products-table-container">
+    <table class="products-table">
+        <thead>
+        <tr>
+            <th>Ürün</th>
+            <th>Normal Fiyat</th>
+            <th>Aksiyon</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let product of products">
+            <td class="product-name">{{ product.productName }}</td>
+            <td class="regular-price">₺{{ product.regularPrice?.toFixed(2) }}</td>
+            <td class="action-buttons">
+                <button class="edit-btn" (click)="editProduct(product)">Düzenle</button>
+                <button class="delete-btn" (click)="deleteProduct(product)">Sil</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,30 @@
+<app-owner-navigation />
+
+<select class="styled-select" (change)="onPlaceChange($event)">
+    <option *ngFor="let place of places" [value]="place._id">
+        {{ place.placeName }}
+    </option>
+</select>
+
+<button class="add-edit-dialog" (click)="openAddWorkerDialog()">Garson Ekle</button>
+
+<div class="workers-table-container">
+    <table class="workers-table">
+        <thead>
+        <tr>
+            <th>Kullanıcı Adı</th>
+            <th>İşlemler</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let worker of workers">
+            <td class="worker-username">{{ worker.username }}</td>
+            <td class="action-buttons">
+                <button class="edit-btn" (click)="editWorker(worker)">Düzenle</button>
+                <button class="delete-btn" (click)="deleteWorker(worker)">Sil</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
