@@ -15,9 +15,14 @@ export class SocketService {
   constructor() {
     console.log('🔄 SocketService oluşturuluyor...');
 
-    this.socket = io(environment.apiUrl, {
+    // Environment'dan socket URL'i al
+    this.socket = io(environment.socketUrl, {
       autoConnect: false,
-      transports: ['websocket', 'polling']
+      transports: ['websocket', 'polling'],
+      // Production'da HTTPS gerekli ise:
+      secure: environment.production,
+      // CORS için:
+      withCredentials: true
     });
 
     this.setupEventListeners();

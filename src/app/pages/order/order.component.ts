@@ -58,35 +58,41 @@ export class OrderComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Fiyat güncellemelerine bağlan
+// Fiyat güncellemelerine bağlan
   connectToPriceUpdates(): void {
     this.productService.connectToPriceUpdates(""+this.placeId);
 
     // İlk fiyatları dinle
     this.initialPricesSubscription = this.productService.getInitialPrices().subscribe({
       next: (products) => {
-        // Ürünleri güncelle ama count değerlerini koru
-        this.products = this.products.map(localProduct => {
-          const updatedProduct = products.find((p: any) => p._id === localProduct._id);
-          if (updatedProduct) {
-            return {
-              ...updatedProduct,
-              count: localProduct.count || 0
-            };
-          }
-          return localProduct;
-        });
+        console.log('Socket\'ten gelen initial products:', products);
 
-        // Eğer products boşsa (ilk yükleme), count'ları 0 yap
         if (this.products.length === 0) {
+          // İlk yükleme - tüm ürünleri count ile birlikte set et
           this.products = products.map((product: any) => ({
             ...product,
             count: 0
           }));
+          console.log('İlk ürün yüklemesi tamamlandı:', this.products.length, 'ürün');
+        } else {
+          // Güncelleme - mevcut count değerlerini koru
+          this.products = this.products.map(localProduct => {
+            const updatedProduct = products.find((p: any) => p._id === localProduct._id);
+            if (updatedProduct) {
+              return {
+                ...updatedProduct,
+                count: localProduct.count || 0
+              };
+            }
+            return localProduct;
+          });
+          console.log('Ürün fiyatları güncellendi');
         }
       },
       error: (err) => {
         console.error('İlk fiyatlar alınırken hata:', err);
+        // Hata durumunda fallback olarak HTTP ile getir
+        this.getProductsFallback();
       }
     });
 
@@ -97,6 +103,24 @@ export class OrderComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         console.error('Fiyat güncelleme dinleme hatası:', err);
+      }
+    });
+  }
+
+// Fallback metodu - socket başarısız olursa HTTP ile getir
+  private getProductsFallback(): void {
+    this.productService.getProducts(""+this.placeId).subscribe({
+      next: (res) => {
+        if (res) {
+          this.products = res.products.map((product: any) => ({
+            ...product,
+            count: 0
+          }));
+          console.log("Fallback: Ürünler HTTP ile getirildi:", this.products);
+        }
+      },
+      error: (err) => {
+        console.error("Fallback ürün getirme hatası:", err);
       }
     });
   }
