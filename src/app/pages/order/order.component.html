@@ -35,7 +35,8 @@
             />
 
             <ul class="product-list">
-                <li *ngFor="let product of filteredProducts" class="product-item">                    <div class="product-info">
+                <li *ngFor="let product of filteredProducts" class="product-item">
+                    <div class="product-info">
                         <span class="product-name">{{ product.productName }}</span>
                         <span class="product-price">₺{{ product.currentPrice?.toFixed(2) }}</span>
                     </div>
@@ -61,6 +62,7 @@
 
         <!-- Sipariş Geçmişi -->
         <div *ngIf="activeTab === 'orders'" class="orders-section">
+            <div class="orders-table-container">
             <table class="orders-table">
                 <thead>
                 <tr>
@@ -110,8 +112,7 @@
                     </tr>
                 </ng-container>
                 </tbody>
-            </table>
-
+            </table></div>
             <div *ngIf="orders.length === 0" class="no-orders">
                 <p>Henüz sipariş bulunmamaktadır.</p>
             </div>

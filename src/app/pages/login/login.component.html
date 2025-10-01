@@ -1,7 +1,23 @@
-<input [(ngModel)]="username">
+<div class="login-container">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Giriş Yap</mat-card-title>
+        </mat-card-header>
 
-<input [(ngModel)]="password">
+        <mat-card-content>
+            <form (ngSubmit)="login()">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Kullanıcı Adı</mat-label>
+                    <input matInput [(ngModel)]="username" name="username" required>
+                </mat-form-field>
 
-{{username}}
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Şifre</mat-label>
+                    <input matInput type="password" [(ngModel)]="password" name="password" required>
+                </mat-form-field>
 
-<button (click)="login()" >Giriş Yap</button>
+                <button mat-raised-button color="primary" class="full-width">Giriş Yap</button>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>

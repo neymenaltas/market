@@ -1,0 +1,19 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* sayfanın ortasında olsun */
+  padding: 16px;
+}
+
+mat-card {
+  width: 100%;
+  max-width: 400px; /* laptopta dar görünmesin */
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.full-width {
+  width: 100%;
+  margin-top: 12px;
+}

@@ -2,12 +2,24 @@ import { Component } from '@angular/core';
 import {AuthService} from "@services/auth.service";
 import {FormsModule} from "@angular/forms";
 import {Router} from "@angular/router";
+import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
+import {MatFormField, MatLabel} from "@angular/material/form-field";
+import {MatInput} from "@angular/material/input";
+import {MatButton} from "@angular/material/button";
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
-    FormsModule
+    FormsModule,
+    MatCard,
+    MatCardHeader,
+    MatCardContent,
+    MatCardTitle,
+    MatFormField,
+    MatInput,
+    MatButton,
+    MatLabel
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'

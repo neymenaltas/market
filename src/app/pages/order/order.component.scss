@@ -175,12 +175,6 @@
   transition: background 0.2s ease, transform 0.1s ease;
 }
 
-.btn-decrement:hover,
-.btn-increment:hover {
-  background: #096dd9;
-  transform: translateY(-1px);
-}
-
 .product-count {
   min-width: 2rem;
   text-align: center;
@@ -340,4 +334,75 @@
       font-style: italic;
     }
   }
+}
+
+/* Ana HTML ve Body etiketlerine tam boyutu ayarla */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Navigasyonlar hariç kalan tüm alanı kapsayan bir yapı kuralım */
+
+.order-container {
+  /* Sayfanın kalan yüksekliğini tam olarak kullanması için */
+  height: calc(100vh - 90px); /* Bu değeri, üstteki navigasyonun kesin yüksekliği (örneğin 60px) ile değiştirin! */
+  display: flex;
+  flex-direction: column;
+  padding: 1rem; /* Konteynerın etrafındaki boşluğu ayarlayabilirsiniz */
+  box-sizing: border-box; /* padding'in toplam yüksekliğe dahil olmasını sağlar */
+  overflow: hidden; /* Dışarıya taşmayı engelle */
+}
+
+/* Tab İçeriğinin (Tab-Content) Kalan Alanı Doldurması */
+.tab-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden; /* Bu, içindeki bölümlerin taşmasını kontrol eder */
+}
+
+/* Products/Orders Bölümlerinin Tab İçeriği Kadar Uzaması */
+.products-section,
+.orders-section {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  /* Padding'i koru */
+  padding: 1.5rem;
+  /* max-height: 100% ekleyerek sınırla */
+  max-height: 100%;
+  box-sizing: border-box;
+}
+
+/* Scroll Konteynerları */
+.product-list,
+.orders-section .orders-table-container {
+  flex-grow: 1;
+  overflow-y: auto; /* Dikey scrollbar'ı ekle */
+  /* Diğer elemanların kapladığı alanı çıkararak dinamik yükseklik ayarla */
+  /* Gerekirse: max-height: calc(100% - [Diğer Elemanların Toplam Yüksekliği]) */
+  min-height: 0; /* Flex-grow'un çalışması için kritik */
+}
+
+/* Ürünler sekmesindeki sabit elementlerin CSS'ini kontrol edelim */
+.products-section .search-input {
+  flex-shrink: 0; /* Küçülmesini engelle */
+}
+.products-section .total-amount,
+.products-section .btn-order-wrapper {
+  flex-shrink: 0; /* Küçülmesini engelle */
+  margin-top: 1rem;
+}
+
+/* Orders sekmesindeki sabit elementler */
+.orders-section .no-orders {
+  flex-shrink: 0;
+}
+
+/* Tabloların min-height'ı 0 olmalı ki scrollable konteyner içinde esnesinler */
+.orders-section .orders-table {
+  min-height: 0;
 }
