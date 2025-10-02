@@ -21,8 +21,8 @@ export class ProductService {
     return this.http.get<any>(`${this.apiUrl}/owner/products/${placeId}`);
   }
 
-  createOrder(placeId: string, orderProduct: any[]): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/worker/create-order`, {placeId, products: orderProduct});
+  createOrder(placeId: string, orderProduct: any[], table: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/worker/create-order`, {placeId, products: orderProduct, table});
   }
 
   getWorkerOrders(userId: string): Observable<any> {
