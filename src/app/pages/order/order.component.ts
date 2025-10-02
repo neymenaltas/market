@@ -25,6 +25,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   expandedOrder: number | null = null;
   userRole: string = "";
   table: string = "";
+  loading: boolean = false;
 
   // ✅ SADECE array kullan, observable kullanma
   filteredProducts: any[] = [];
@@ -194,6 +195,7 @@ export class OrderComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.loading = true;
     this.productService.createOrder("" + this.placeId, orderedProducts, this.table).subscribe({
       next: (res) => {
         console.log("Order başarılı:", res);
@@ -205,6 +207,7 @@ export class OrderComponent implements OnInit, OnDestroy {
         // ✅ Filtered products'ı güncelle
         this.updateFilteredProducts(this.searchControl.value || '');
         this.getWorkerOrders();
+        this.loading = false;
         this.toastService.success("Sipariş Alındı")
       },
       error: (err) => {

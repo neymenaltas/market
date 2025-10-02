@@ -24,7 +24,7 @@
     <div class="tab-content">
 
         <!-- Ürün Listesi -->
-        <div *ngIf="activeTab === 'products'" class="products-section">
+        <div *ngIf="activeTab === 'products' && !loading" class="products-section">
 
             <!-- Search -->
             <input
