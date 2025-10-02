@@ -54,3 +54,10 @@
     }
   }
 }
+
+/* Market linkini 800px altı ekranlarda gizle */
+@media (max-width: 800px) {
+  .owner-navbar .market-link {
+    display: none;
+  }
+}

@@ -40,7 +40,7 @@
                         [class.positive]="product.currentPrice - product.previousPrice < 0"
                         [class.negative]="product.currentPrice - product.previousPrice > 0"
                 >
-                    {{ product.currentPrice - product.previousPrice > 0 ? '+' : '' }}{{((product.currentPrice - product.previousPrice) / product.previousPrice * 100) | number:'1.1-1'}}%
+                    {{ product.currentPrice - product.previousPrice < 0 ? '' : '+' }}{{((product.currentPrice - product.previousPrice) / product.previousPrice * 100) | number:'1.1-1'}}%
                 </td>
             </tr>
             </tbody>
@@ -84,8 +84,8 @@
                 </td>
                 <td
                         class="change-percent"
-                        [class.positive]="product.currentPrice - product.previousPrice < 0"
-                        [class.negative]="product.currentPrice - product.previousPrice > 0"
+                        [class.positive]="product.currentPrice - product.previousPrice > 0"
+                        [class.negative]="product.currentPrice - product.previousPrice < 0"
                 >
                     {{ product.currentPrice - product.previousPrice > 0 ? '+' : '' }}{{((product.currentPrice - product.previousPrice) / product.previousPrice * 100) | number:'1.1-1'}}%
                 </td>
@@ -100,9 +100,9 @@
             <div *ngFor="let product of products" class="ticker-item">
                 <span class="ticker-product-name">{{ product.productName }}</span>
                 <span class="ticker-change"
-                      [class.positive]="product.currentPrice - product.previousPrice < 0"
-                      [class.negative]="product.currentPrice - product.previousPrice > 0">
-          {{ product.currentPrice - product.previousPrice > 0 ? '+' : '' }}{{((product.currentPrice - product.previousPrice) / product.previousPrice * 100) | number:'1.1-1'}}%
+                      [class.positive]="product.currentPrice - product.previousPrice > 0"
+                      [class.negative]="product.currentPrice - product.previousPrice < 0">
+          {{ product.currentPrice - product.previousPrice < 0 ? '' : '+' }}{{((product.currentPrice - product.previousPrice) / product.previousPrice * 100) | number:'1.1-1'}}%
         </span>
             </div>
         </div>

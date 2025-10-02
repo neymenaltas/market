@@ -1,7 +1,7 @@
 <nav class="owner-navbar">
     <div class="navbar-left">
-        <a routerLink="/market" routerLinkActive="active">Market</a>
+        <a class="market-link" routerLink="/market" routerLinkActive="active">Market</a>
         <a routerLink="/order" routerLinkActive="active">Siparişler</a>
-        <a routerLink="/login" routerLinkActive="active">Giriş</a>
+        <a routerLink="/login" routerLinkActive="active" (click)="deleteJson()">Giriş</a>
     </div>
 </nav>

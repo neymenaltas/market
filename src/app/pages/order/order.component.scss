@@ -405,3 +405,75 @@ html, body {
 .orders-section .orders-table {
   min-height: 0;
 }
+
+/* Orders Table Container - Yatay Taşmayı Önle */
+.orders-table-container {
+  width: 100%;
+  overflow-x: auto; /* Yatay scroll ekle */
+  -webkit-overflow-scrolling: touch; /* iOS'ta smooth scroll */
+}
+
+.orders-table {
+  width: 100%;
+  min-width: 600px; /* Tablonun minimum genişliği */
+  border-collapse: collapse;
+  background: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* Mobil için Responsive Tablo */
+@media screen and (max-width: 768px) {
+  .orders-table-container {
+    margin: 0 -1rem; /* Padding'i nötralize et */
+    padding: 0 1rem;
+  }
+
+  .orders-table {
+    min-width: 100%; /* Mobilde minimum genişliği kaldır */
+    font-size: 0.85rem; /* Yazı boyutunu küçült */
+  }
+
+  .orders-table th,
+  .orders-table td {
+    padding: 0.5rem 0.3rem; /* Padding'i azalt */
+    font-size: 0.85rem;
+  }
+
+  /* Sil butonunu küçült */
+  .delete-btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  /* Detay tablosunu da responsive yap */
+  .order-products-table {
+    font-size: 0.8rem;
+  }
+
+  .order-products-table th,
+  .order-products-table td {
+    padding: 0.4rem 0.2rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Çok küçük ekranlar için (320px - 480px) */
+@media screen and (max-width: 480px) {
+  .orders-table th:first-child,
+  .orders-table td:first-child {
+    position: sticky;
+    left: 0;
+    background: #fff;
+    z-index: 1;
+  }
+
+  .orders-table thead th:first-child {
+    background: #f0f2f5;
+  }
+
+  .orders-section {
+    padding: 0.5rem;
+  }
+}

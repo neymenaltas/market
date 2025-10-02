@@ -30,7 +30,27 @@ export class LoginComponent {
   username: string = "";
   password: string = "";
 
-  constructor(public authService: AuthService, private router: Router, public toastService: ToastService) {
+  constructor(
+    public authService: AuthService,
+    private router: Router,
+    public toastService: ToastService
+  ) {
+    this.checkStoredUser();
+  }
+
+  private checkStoredUser(): void {
+    try {
+      const storedUser = localStorage.getItem("userData");
+      if (storedUser) {
+        const userData = JSON.parse(storedUser);
+
+        if (userData?.user?.id) {
+          this.router.navigate(['/order']);
+        }
+      }
+    } catch (error) {
+      console.error('Error checking stored user:', error);
+    }
   }
 
   login() {
