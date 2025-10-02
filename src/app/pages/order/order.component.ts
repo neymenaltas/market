@@ -5,6 +5,7 @@ import { debounceTime, map, Observable, startWith, Subscription, BehaviorSubject
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { OwnerNavigationComponent } from "@components/owner-navigation/owner-navigation.component";
 import { WorkerNavigationComponent } from "@components/worker-navigation/worker-navigation.component";
+import {ToastService} from "@services/toast.service";
 
 @Component({
   selector: 'app-order',
@@ -30,9 +31,10 @@ export class OrderComponent implements OnInit, OnDestroy {
   private priceUpdateSubscription: Subscription | null = null;
   private initialPricesSubscription: Subscription | null = null;
 
-  constructor(public productService: ProductService) {}
+  constructor(public productService: ProductService, public toastService: ToastService) { }
 
   ngOnInit() {
+    this.toastService.success('Test message from service');
     this.placeId = JSON.parse(<string>localStorage.getItem("userData")).user.placeIds[0];
     this.workerId = JSON.parse(<string>localStorage.getItem("userData")).user.id;
     this.userRole = JSON.parse(<string>localStorage.getItem("userData")).user.role;
@@ -203,8 +205,10 @@ export class OrderComponent implements OnInit, OnDestroy {
         // ✅ Filtered products'ı güncelle
         this.updateFilteredProducts(this.searchControl.value || '');
         this.getWorkerOrders();
+        this.toastService.success("Sipariş Alındı")
       },
       error: (err) => {
+        this.toastService.error("Sipariş Alınamadı")
         console.error("Order hatası:", err);
       }
     });

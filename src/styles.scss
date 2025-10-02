@@ -1,3 +1,4 @@
+
 /* Tüm tarayıcı default boşluklarını sıfırla */
 html, body {
   margin: 0;
@@ -16,4 +17,122 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 button {
   touch-action: none;
+}
+
+// Önce varsayılan stilleri override et
+.ngx-toastr {
+  // Modern shadow ve border
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+  border-radius: 12px !important;
+  border: none !important;
+  padding: 16px 20px !important;
+  min-height: 60px !important;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+
+  // Container genişliği
+  width: 380px !important;
+  max-width: 90vw !important;
+
+  // İçerik hizalaması
+  display: flex !important;
+  align-items: center !important;
+  position: relative !important;
+
+  // Background overlay kaldır
+  background-image: none !important;
+  background-position: 20px center !important;
+  padding-left: 60px !important;
+}
+
+// Toast type'larına göre özel stiller
+.toast-success {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  color: white !important;
+  border-left: 4px solid #047857 !important;
+}
+
+.toast-error {
+  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+  color: white !important;
+  border-left: 4px solid #b91c1c !important;
+}
+
+.toast-warning {
+  background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+  color: white !important;
+  border-left: 4px solid #b45309 !important;
+}
+
+.toast-info {
+  background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+  color: white !important;
+  border-left: 4px solid #1d4ed8 !important;
+}
+
+// Progress bar
+.toast-progress {
+  background: rgba(255, 255, 255, 0.4) !important;
+  height: 3px !important;
+}
+
+// Başlık ve mesaj stilleri
+.toast-title {
+  font-weight: 600 !important;
+  font-size: 15px !important;
+  margin-bottom: 4px !important;
+  color: white !important;
+}
+
+.toast-message {
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+  color: rgba(255, 255, 255, 0.95) !important;
+  font-weight: 400 !important;
+}
+
+// Responsive tasarım
+@media (max-width: 768px) {
+  .toast-container {
+    width: 100% !important;
+    padding: 10px !important;
+    left: 0 !important;
+    right: 0 !important;
+
+    .ngx-toastr {
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 8px 0 !important;
+      border-radius: 8px !important;
+      padding: 14px 16px !important;
+      padding-left: 50px !important;
+      min-height: 55px !important;
+
+      &::before {
+        left: 16px !important;
+        font-size: 18px !important;
+      }
+    }
+  }
+}
+
+// Container pozisyonları
+.toast-top-right,
+.toast-bottom-right {
+  .ngx-toastr {
+    margin: 0 0 12px 0 !important;
+  }
+}
+
+.toast-top-center,
+.toast-bottom-center {
+  .ngx-toastr {
+    margin: 0 auto 12px auto !important;
+  }
+}
+
+// Hover efekti
+.ngx-toastr:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2) !important;
+  transition: all 0.3s ease !important;
 }

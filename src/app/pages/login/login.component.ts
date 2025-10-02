@@ -6,6 +6,7 @@ import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/mat
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MatButton} from "@angular/material/button";
+import {ToastService} from "@services/toast.service";
 
 @Component({
   selector: 'app-login',
@@ -29,7 +30,7 @@ export class LoginComponent {
   username: string = "";
   password: string = "";
 
-  constructor(public authService: AuthService, private router: Router) {
+  constructor(public authService: AuthService, private router: Router, public toastService: ToastService) {
   }
 
   login() {
@@ -45,6 +46,7 @@ export class LoginComponent {
         this.router.navigate(['/order']);
       },
       error: (err) => {
+        this.toastService.error("Giriş Yapılamadı")
         console.error("Login hatası:", err);
       }
     });
