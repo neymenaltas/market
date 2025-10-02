@@ -98,6 +98,8 @@
   color: #ffffff;
   font-weight: 900;
   text-shadow: 0 0 8px rgba(0, 255, 150, 0.8);
+  white-space: nowrap;
+  overflow: auto;
 }
 
 .products-table tr.auto-highlighted td {
@@ -120,36 +122,45 @@
 .product-name {
   font-weight: bold;
   color: #ffffff;
+  font-size: 1.4rem;
+  white-space: normal;
+  word-wrap: break-word;
 }
 
 .current-price-positive {
   font-weight: bold;
   color: #00ff9d;
   text-shadow: 0 0 6px #00ff9d;
+  font-size: 1.4rem;
 }
 
 .current-price-negative {
   font-weight: bold;
   color: #ff4d4d;
   text-shadow: 0 0 6px #ff1a1a;
+  font-size: 1.4rem;
 }
 
 .current-price {
   font-weight: bold;
   color: rgba(255, 255, 255, 0.7);
+  font-size: 1.4rem;
 }
 
 .regular-price {
   color: rgba(255, 255, 255, 0.5);
+  font-size: 1.4rem;
 }
 
 .previous-price {
   color: rgba(255, 255, 255, 0.5);
   text-decoration: line-through;
+  font-size: 1.4rem;
 }
 
 .change-percent {
   font-weight: bold;
+  font-size: 1.4rem;
 }
 
 .change-percent.positive {
