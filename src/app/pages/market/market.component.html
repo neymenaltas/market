@@ -47,53 +47,6 @@
         </table>
     </div>
 
-    <!-- Sağ Tablo - Değişiklik sıralamalı -->
-    <div class="table-wrapper">
-        <table class="products-table">
-            <thead>
-            <tr>
-                <th>Ürün</th>
-                <th>Son Fiyat</th>
-                <th>Önceki Fiyat</th>
-                <th>Normal Fiyat</th>
-                <th>Değişim</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr
-                    *ngFor="let product of sortedProductsByChange"
-                    [class.updated]="product.justUpdated"
-                    [id]="'sorted-product-' + product._id"
-            >
-                <td class="product-name">{{ product.productName }}</td>
-                <td class="current-price-positive" *ngIf="product.currentPrice - product.previousPrice < 0">
-                    ₺{{ product.currentPrice?.toFixed(2) }}
-                </td>
-                <td class="current-price-negative" *ngIf="product.currentPrice - product.previousPrice > 0">
-                    ₺{{ product.currentPrice?.toFixed(2) }}
-                </td>
-                <td class="current-price" *ngIf="product.currentPrice - product.previousPrice == 0">
-                    ₺{{ product.currentPrice?.toFixed(2) }}
-                </td>
-                <td *ngIf="product.currentPrice !== product.regularPrice" class="previous-price">
-                    ₺{{ product.previousPrice.toFixed(2) }}
-                </td>
-                <td *ngIf="product.currentPrice === product.regularPrice" class="regular-price">—</td>
-                <td *ngIf="product.currentPrice !== product.regularPrice" class="regular-price">
-                    ₺{{ product.regularPrice.toFixed(2) }}
-                </td>
-                <td
-                        class="change-percent"
-                        [class.positive]="product.currentPrice - product.previousPrice < 0"
-                        [class.negative]="product.currentPrice - product.previousPrice > 0"
-                >
-                    {{ product.currentPrice - product.previousPrice > 0 ? '+' : '' }}{{((product.currentPrice - product.previousPrice) / product.previousPrice * 100) | number:'1.1-1'}}%
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
     <!-- Haber bandı -->
     <div class="news-ticker-container">
         <div class="news-ticker">
