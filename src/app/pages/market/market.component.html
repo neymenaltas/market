@@ -84,8 +84,8 @@
                 </td>
                 <td
                         class="change-percent"
-                        [class.positive]="product.currentPrice - product.previousPrice > 0"
-                        [class.negative]="product.currentPrice - product.previousPrice < 0"
+                        [class.positive]="product.currentPrice - product.previousPrice < 0"
+                        [class.negative]="product.currentPrice - product.previousPrice > 0"
                 >
                     {{ product.currentPrice - product.previousPrice > 0 ? '+' : '' }}{{((product.currentPrice - product.previousPrice) / product.previousPrice * 100) | number:'1.1-1'}}%
                 </td>
