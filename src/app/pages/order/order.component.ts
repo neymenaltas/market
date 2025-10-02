@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ProductService } from "@services/product.service";
 import { CommonModule } from "@angular/common";
 import { debounceTime, map, Observable, startWith, Subscription, BehaviorSubject } from 'rxjs';
-import { FormControl, ReactiveFormsModule } from "@angular/forms";
+import {FormControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { OwnerNavigationComponent } from "@components/owner-navigation/owner-navigation.component";
 import { WorkerNavigationComponent } from "@components/worker-navigation/worker-navigation.component";
 import {ToastService} from "@services/toast.service";
@@ -10,7 +10,7 @@ import {ToastService} from "@services/toast.service";
 @Component({
   selector: 'app-order',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, OwnerNavigationComponent, WorkerNavigationComponent],
+  imports: [CommonModule, ReactiveFormsModule, OwnerNavigationComponent, WorkerNavigationComponent, FormsModule],
   templateUrl: './order.component.html',
   styleUrl: './order.component.scss'
 })
@@ -24,6 +24,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   searchControl = new FormControl('');
   expandedOrder: number | null = null;
   userRole: string = "";
+  table: string = "";
 
   // ✅ SADECE array kullan, observable kullanma
   filteredProducts: any[] = [];
@@ -184,7 +185,7 @@ export class OrderComponent implements OnInit, OnDestroy {
         productId: product._id,
         productName: product.productName,
         soldPrice: product.currentPrice,
-        quantity: product.count
+        quantity: product.count,
       });
     });
 
@@ -193,7 +194,7 @@ export class OrderComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.productService.createOrder("" + this.placeId, orderedProducts).subscribe({
+    this.productService.createOrder("" + this.placeId, orderedProducts, this.table).subscribe({
       next: (res) => {
         console.log("Order başarılı:", res);
         // Count'ları sıfırla

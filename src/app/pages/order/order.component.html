@@ -33,6 +33,12 @@
                     [formControl]="searchControl"
                     class="search-input"
             />
+            <input
+                    type="text"
+                    placeholder="Masa Numarası"
+                    class="search-input"
+                    [(ngModel)]="table"
+            />
 
             <ul class="product-list">
                 <li *ngFor="let product of filteredProducts" class="product-item">
@@ -88,7 +94,7 @@
                     <tr *ngIf="expandedOrder === i">
                         <td colspan="6">
                             <div class="order-details">
-                                <h3>Sipariş Detayları</h3>
+                                <h3>Sipariş Detayları - {{order.table}}</h3>
                                 <table class="order-products-table">
                                     <thead>
                                     <tr>
