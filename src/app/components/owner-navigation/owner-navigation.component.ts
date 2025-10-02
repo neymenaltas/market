@@ -13,4 +13,7 @@ import {RouterLink, RouterLinkActive} from "@angular/router";
 })
 export class OwnerNavigationComponent {
 
+  deleteJson() {
+    localStorage.removeItem("userData");
+  }
 }

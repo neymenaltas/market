@@ -29,6 +29,10 @@ export class ProductService {
     return this.http.get<any>(`${this.apiUrl}/worker/get-orders/${userId}`);
   }
 
+  getPlaceOrders(placeId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/owner/get-orders/${placeId}`);
+  }
+
   deleteProduct(productId: string): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/owner/products/${productId}`);
   }
@@ -42,7 +46,7 @@ export class ProductService {
   }
 
   stopExchange(placeId: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/owner/stop-exchange/${placeId}`, {placeId});
+    return this.http.post<any>(`${this.apiUrl}/owner/reset-prices/${placeId}`, {placeId});
   }
 
   // WebSocket bağlantısını başlat

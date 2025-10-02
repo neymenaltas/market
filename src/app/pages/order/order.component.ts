@@ -34,7 +34,6 @@ export class OrderComponent implements OnInit, OnDestroy {
   constructor(public productService: ProductService, public toastService: ToastService) { }
 
   ngOnInit() {
-    this.toastService.success('Test message from service');
     this.placeId = JSON.parse(<string>localStorage.getItem("userData")).user.placeIds[0];
     this.workerId = JSON.parse(<string>localStorage.getItem("userData")).user.id;
     this.userRole = JSON.parse(<string>localStorage.getItem("userData")).user.role;
@@ -215,17 +214,32 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   getWorkerOrders() {
-    this.productService.getWorkerOrders("" + this.workerId).subscribe({
-      next: (res) => {
-        if (res) {
-          this.orders = res.orders;
-          console.log("Orderlar getirildi:", this.orders);
+    if(this.userRole === 'worker') {
+      this.productService.getWorkerOrders("" + this.workerId).subscribe({
+        next: (res) => {
+          if (res) {
+            this.orders = res.orders;
+            console.log("Orderlar getirildi:", this.orders);
+          }
+        },
+        error: (err) => {
+          console.error("Order getirme hatası:", err);
         }
-      },
-      error: (err) => {
-        console.error("Order getirme hatası:", err);
-      }
-    });
+      });
+    } else if (this.userRole === 'owner') {
+      this.productService.getPlaceOrders("" + this.placeId).subscribe({
+        next: (res) => {
+          if (res) {
+            this.orders = res.orders;
+            console.log("Orderlar getirildi:", this.orders);
+          }
+        },
+        error: (err) => {
+          console.error("Order getirme hatası:", err);
+        }
+      });
+    }
+
   }
 
   deleteOrder(order: any) {
