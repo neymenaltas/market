@@ -1,1 +1,54 @@
 <app-owner-navigation />
+<div class="report-container">
+    <div class="report-header">
+        <h2>Satış Raporu</h2>
+
+        <!-- Tarih Seçici -->
+        <div class="date-picker-container">
+            <label for="reportDate">Rapor Tarihi:</label>
+            <input
+                    type="date"
+                    id="reportDate"
+                    class="styled-date-input"
+                    [value]="selectedDate"
+                    (change)="onDateChange($event)"
+                    [max]="maxDate"
+            />
+        </div>
+
+        <div class="total-summary">
+            <span class="summary-label">Toplam Satış:</span>
+            <span class="summary-value">₺{{ totalSalesAmount | number:'1.2-2' }}</span>
+        </div>
+    </div>
+
+    <!-- Loading durumu -->
+    <div *ngIf="isLoading" class="loading-container">
+        <p>Rapor yükleniyor...</p>
+    </div>
+
+    <!-- Hata durumu -->
+    <div *ngIf="error" class="error-container">
+        <p>{{ error }}</p>
+    </div>
+
+    <!-- Tablo -->
+    <table class="report-table" *ngIf="!isLoading && !error">
+        <thead>
+        <tr>
+            <th>Ürün Adı</th>
+            <th>Toplam Satış</th>
+            <th>Toplam Adet</th>
+            <th>Birim Fiyat Ort.</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let product of productsArray">
+            <td class="product-name">{{ product.name }}</td>
+            <td class="sales-amount">₺{{ product.totalSalesAmount | number:'1.2-2' }}</td>
+            <td class="quantity">{{ product.totalQuantitySold }}</td>
+            <td class="avg-price">₺{{ product.averagePricePerUnit | number:'1.2-2' }}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
