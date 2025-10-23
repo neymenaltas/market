@@ -23,6 +23,7 @@ export class ExchangeComponent implements OnInit {
   places: any[] = [];
   selectedPlaceId = "";
   ownerId: string = "";
+  crashMessage: string = "";
 
   constructor(public productService: ProductService, public placeService: PlaceService) {
   }
@@ -36,6 +37,7 @@ export class ExchangeComponent implements OnInit {
     const selectEl = event.target as HTMLSelectElement;
     this.selectedPlaceId = selectEl.value;
     console.log('Seçilen Place ID:', this.selectedPlaceId);
+    this.loadCrashMessage();
   }
 
   getPlaces() {
@@ -44,11 +46,42 @@ export class ExchangeComponent implements OnInit {
         this.places = res.places;
         if (this.places.length === 1) {
           this.selectedPlaceId = this.places[0]._id;
+          this.loadCrashMessage();
         }
         console.log("Kayıt başarılı:", res);
       },
       error: (err) => {
         console.error("Kayıt hatası:", err);
+      }
+    });
+  }
+
+  loadCrashMessage() {
+    if (!this.selectedPlaceId) return;
+
+    this.placeService.getCrashMessage(this.selectedPlaceId).subscribe({
+      next: (res) => {
+        this.crashMessage = res.crashMessage || '';
+        console.log("Crash message yüklendi:", res);
+      },
+      error: (err) => {
+        console.error("Crash message yükleme hatası:", err);
+      }
+    });
+  }
+
+  updateCrashMessage() {
+    if (!this.selectedPlaceId) {
+      console.error("Place seçilmedi");
+      return;
+    }
+
+    this.placeService.updateCrashMessage(this.selectedPlaceId, this.crashMessage).subscribe({
+      next: (res) => {
+        console.log("Crash message güncellendi:", res);
+      },
+      error: (err) => {
+        console.error("Crash message güncelleme hatası:", err);
       }
     });
   }
@@ -74,5 +107,4 @@ export class ExchangeComponent implements OnInit {
       }
     })
   }
-
 }

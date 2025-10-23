@@ -6,4 +6,9 @@
 </select>
 <input [(ngModel)]="intervalMs">
 <button (click)="startExchange()">Start Market</button>
-<button (click)="stopExchange()">Stop Markex</button>
+<button (click)="stopExchange()">Stop Market</button>
+
+<div style="margin-top: 20px;">
+    <input [(ngModel)]="crashMessage" placeholder="Crash Message">
+    <button (click)="updateCrashMessage()">Değiştir</button>
+</div>

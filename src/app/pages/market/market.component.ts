@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ProductService } from "@services/product.service";
+import {PlaceService} from "@services/place.service";
 
 @Component({
   selector: 'app-market',
@@ -15,23 +16,28 @@ export class MarketComponent implements OnInit, OnDestroy {
   products: any[] = [];
   loading = true;
   error: string | null = null;
+  crashMessage: string = '';
+  private crashMessageSubscription: Subscription | null = null;
 
   // Auto-scroll için yeni özellikler
   currentHighlightedIndex: number = -1;
-  private autoScrollInterval: any = null;
+  private animationFrameId: number | null = null;
+  private lastScrollTime: number = 0;
   private readonly SCROLL_INTERVAL = 3000; // 3 saniye
   private readonly SCROLL_DELAY = 5000; // Başlangıç gecikmesi
+  private scrollStartTime: number = 0;
 
   private priceUpdateSubscription: Subscription | null = null;
   private initialPricesSubscription: Subscription | null = null;
   private errorSubscription: Subscription | null = null;
   private connectionTimeout: any = null;
 
-  constructor(private productService: ProductService) { }
+  constructor(private productService: ProductService, private placeService: PlaceService) { }
 
   ngOnInit(): void {
     this.loadProducts();
     this.connectToPriceUpdates();
+    this.listenToCrashMessage();
 
     // Auto-scroll'u başlat (biraz gecikme ile)
     setTimeout(() => {
@@ -42,22 +48,40 @@ export class MarketComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.disconnectFromPriceUpdates();
     this.stopAutoScroll();
+    if (this.crashMessageSubscription) {
+      this.crashMessageSubscription.unsubscribe();
+      this.crashMessageSubscription = null;
+    }
   }
 
-  // Auto-scroll başlat
+  // Auto-scroll başlat (requestAnimationFrame ile)
   startAutoScroll(): void {
     if (this.products.length === 0) return;
 
-    this.autoScrollInterval = setInterval(() => {
+    this.scrollStartTime = performance.now();
+    this.lastScrollTime = performance.now();
+    this.autoScrollLoop();
+  }
+
+  // Ana scroll döngüsü
+  private autoScrollLoop = (): void => {
+    const currentTime = performance.now();
+
+    // SCROLL_INTERVAL süre geçtiyse bir sonraki satıra geç
+    if (currentTime - this.lastScrollTime >= this.SCROLL_INTERVAL) {
       this.highlightNextRow();
-    }, this.SCROLL_INTERVAL);
+      this.lastScrollTime = currentTime;
+    }
+
+    // Döngüyü devam ettir
+    this.animationFrameId = requestAnimationFrame(this.autoScrollLoop);
   }
 
   // Auto-scroll durdur
   stopAutoScroll(): void {
-    if (this.autoScrollInterval) {
-      clearInterval(this.autoScrollInterval);
-      this.autoScrollInterval = null;
+    if (this.animationFrameId !== null) {
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
     }
   }
 
@@ -224,5 +248,19 @@ export class MarketComponent implements OnInit, OnDestroy {
         changePercent: ((p.currentPrice - p.regularPrice) / p.regularPrice) * 100
       }))
       .sort((a, b) => a.changePercent - b.changePercent);
+  }
+
+  listenToCrashMessage(): void {
+    this.crashMessageSubscription = this.placeService.socketService
+      .onCrashMessageUpdate()
+      .subscribe({
+        next: (update) => {
+          console.log('🚨 YENİ CRASH MESSAGE:', update.crashMessage);
+          this.crashMessage = update.crashMessage;
+        },
+        error: (err) => {
+          console.error('Crash message dinleme hatası:', err);
+        }
+      });
   }
 }

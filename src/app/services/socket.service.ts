@@ -184,4 +184,20 @@ export class SocketService {
   getSubscribers(): Map<string, number> {
     return new Map(this.subscribers);
   }
+
+  // Crash message güncellemelerini dinle
+  onCrashMessageUpdate(): Observable<any> {
+    return new Observable(observer => {
+      const listener = (data: any) => {
+        console.log('📢 Crash message güncellendi:', data);
+        observer.next(data);
+      };
+
+      this.socket.on('crash-message-updated', listener);
+
+      return () => {
+        this.socket.off('crash-message-updated', listener);
+      };
+    });
+  }
 }
